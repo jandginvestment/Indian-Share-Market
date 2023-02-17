@@ -20,14 +20,16 @@ df['weekday'] = df['Date'].dt.day_name()
 # Create a new DataFrame that contains the close price of each stock on each day of the year, grouped by year
 comparedf = df.groupby(['running_index', 'year'])['Close'].mean().reset_index()
 
-comparedf = df[df['running_index'] < 250]
+comparedf = comparedf[comparedf['running_index'] < 242]
 
 # Get the close price of the stock on the same day of the last year
-last_year_close = comparedf[comparedf['year'] == 2022][comparedf['running_index'] == comparedf.iloc[-1]['running_index']]['Close'].values[0]
+if not df.empty:
+    if not comparedf.empty:
+        last_year_close = comparedf[comparedf['year'] == 2022][comparedf['running_index'] == df.iloc[-1]['running_index']]['Close'].values[0]
 
 # Calculate the difference between the close price of the stock on the same day of the last year and the recent close price
-difference = df.iloc[-1]['Close'] - last_year_close
+        difference = df.iloc[-1]['Close'] - last_year_close
 
 # Print the result
-if difference > 0:
-    print(f"{ticker} has performed better this year than the same")
+        if difference > 0:
+            print(f"{ticker} has performed better this year than the same")
